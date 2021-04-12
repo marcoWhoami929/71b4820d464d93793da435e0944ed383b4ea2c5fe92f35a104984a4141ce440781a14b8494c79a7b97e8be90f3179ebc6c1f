@@ -1,0 +1,11 @@
+# Impedir que se pueda ver el listado de contenidos de un directorio
+
+php_value session.gc_maxlifetime 86400
+php_value session.cookie_lifetime 86400
+Options All -Indexes
+
+# Url Amigables
+
+RewriteEngine On
+
+RewriteRule ^([-a-zA-Z0-9/]+)$ index.php?ruta=$1
