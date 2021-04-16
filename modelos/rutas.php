@@ -8,7 +8,7 @@ class Ruta{
 
 	public function ctrRutaServidor(){
 
-		return "https://sanfranciscodekkerlab.com/crmapp/";
+		return "http://localhost/matrizAdmon/";
 	
 	}
 
