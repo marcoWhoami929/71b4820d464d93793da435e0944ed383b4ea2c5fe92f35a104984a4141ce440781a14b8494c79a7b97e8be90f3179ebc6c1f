@@ -2,7 +2,7 @@
 MENU
 ======================================-->	
 
-<ul class="sidebar-menu">
+<ul class="sidebar-menu" id="menuLateral">
 
 	 <li class="active"><a href="inicio"><i class="fas fa-home"></i> <span>Inicio</span></a></li>
 	 <li class=""><a href="tableroAcciones"><i class="fas fa-tachometer-alt"></i> <span>Acciones</span></a>

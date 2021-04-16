@@ -15,14 +15,7 @@
         
         <i class="fas fa-bars"></i>
       </a>
-      <div class="col-lg-6 col-md-6 col-sm-6" id="divSearch">
-          <form>
-            <div class="form-group">
-              <input type="search" class="form-control" name="nombreCompleto" id="nombreSearch" placeholder="Buscar prospecto o cliente"> 
-              <div id="clientesSearch"></div>
-            </div>
-          </form>
-      </div>
+    
 
     	<div class="navbar-custom-menu"> 
  
@@ -37,6 +30,14 @@
     		</ul>
 
     	</div>
+      <div class="col-lg-6 col-md-6 col-sm-6" id="divSearch">
+          <form>
+            <div class="form-group">
+              <input type="search" class="form-control" name="nombreCompleto" id="nombreSearch" placeholder="Buscar prospecto o cliente"> 
+              <div id="clientesSearch"></div>
+            </div>
+          </form>
+      </div>
 
     </nav>
 
