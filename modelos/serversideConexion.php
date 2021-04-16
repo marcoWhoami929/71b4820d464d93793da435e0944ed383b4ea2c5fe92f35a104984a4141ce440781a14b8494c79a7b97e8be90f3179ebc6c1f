@@ -1,7 +1,7 @@
 
 <?php
 define("HOST_SS","localhost");
-define("DATABASE_SS","sanfranc_crm");
-define("USER_SS","sanfranc_matriz");
-define("PASSWORD_SS","rootWhoami929");
+define("DATABASE_SS","crmapp");
+define("USER_SS","root");
+define("PASSWORD_SS","");
 ?>

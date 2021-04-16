@@ -127,9 +127,33 @@
     background: linear-gradient(to right, #99edc3, #3ded97, #25B182);
     color:white;
   }
+
+  @media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+   #divSearch{
+      margin-top: 50px
+  }
+  #menuLateral{
+    margin-top: 220px;
+  }
+}
+  /* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+
   #divSearch{
     margin-top: 10px;
   }
+
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+
+  #divSearch{
+    margin-top: 10px;
+  }
+
+}
   #clientesSearch{
     position:absolute; 
     top:40; 
