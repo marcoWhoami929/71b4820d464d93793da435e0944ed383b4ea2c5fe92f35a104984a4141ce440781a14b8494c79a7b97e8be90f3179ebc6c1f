@@ -4,6 +4,8 @@ require_once('modelos/conexion.php');
 $idAgente = $_SESSION['id'];
 if ($idAgente == 11) {
   $sql = "SELECT id, asunto, idAgente,color,fechaInicial, fechaFinal,evento FROM eventosview";
+}else if($idAgente == 1){
+   $sql = "SELECT id, asunto, idAgente,color,fechaInicial, fechaFinal,evento FROM eventosview where idAgente in(1,2)";
 }else{
   $sql = "SELECT id, asunto, idAgente,color,fechaInicial, fechaFinal,evento FROM eventosview where idAgente = $idAgente";
 }
