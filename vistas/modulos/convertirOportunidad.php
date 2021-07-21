@@ -1,11 +1,4 @@
-<script type="text/javascript">
-  if (localStorage.idProspecto === undefined) {
 
-    window.location.href = "tableroAcciones";
-  }else{
-
-  }
-</script>
 <div class="content-wrapper">
 
   <section class="content-header">

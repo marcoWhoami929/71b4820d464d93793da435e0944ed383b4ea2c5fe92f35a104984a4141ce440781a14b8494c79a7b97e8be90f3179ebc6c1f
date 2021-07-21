@@ -161,8 +161,23 @@ class ModeloFunciones
 
 	}
 	static public function mdlMostrarListaOportunidadesVenta($item,$valor){
+			if ($valor == "0") {
+			session_start();
+			$idAgente = $_SESSION["id"];
 
-		$stmt = Conexion::conectar()->prepare("SELECT prosp.nombreCompleto,opor.id as idOportunidadVenta,opor.fecha,opor.monto,opor.concepto,opor.cierreEstimado,opor.idCerteza,fas.faseOportunidad FROM oportunidades as opor INNER JOIN prospectos as prosp ON opor.idProspecto = prosp.id INNER JOIN faseoportunidades as fas ON opor.idFaseOportunidad = fas.id WHERE opor.idProspecto = :$item and ventaCerrada = 0");
+
+		$stmt = Conexion::conectar()->prepare("SELECT prosp.id as idProspecto,prosp.nombreCompleto,opor.id as idOportunidadVenta,opor.fecha,opor.monto,opor.concepto,opor.cierreEstimado,opor.idCerteza,fas.faseOportunidad FROM oportunidades as opor INNER JOIN prospectos as prosp ON opor.idProspecto = prosp.id INNER JOIN faseoportunidades as fas ON opor.idFaseOportunidad = fas.id WHERE opor.idAgente = $idAgente and ventaCerrada = 0");
+
+
+		$stmt -> execute();
+
+		return $stmt -> fetchAll();
+		
+			
+		}else{
+
+
+		$stmt = Conexion::conectar()->prepare("SELECT prosp.id as idProspecto,prosp.nombreCompleto,opor.id as idOportunidadVenta,opor.fecha,opor.monto,opor.concepto,opor.cierreEstimado,opor.idCerteza,fas.faseOportunidad FROM oportunidades as opor INNER JOIN prospectos as prosp ON opor.idProspecto = prosp.id INNER JOIN faseoportunidades as fas ON opor.idFaseOportunidad = fas.id WHERE opor.idProspecto = :$item and ventaCerrada = 0");
 
 
 		
@@ -171,6 +186,10 @@ class ModeloFunciones
 		$stmt -> execute();
 
 		return $stmt -> fetchAll();
+
+
+		}
+
 
 		$stmt -> close();
 
@@ -614,9 +633,17 @@ class ModeloFunciones
 			
 		}else{
 
-			$stmt = Conexion::conectar()->prepare("SELECT $parametros FROM $tabla WHERE $item = :$item");
+			if ($valor != 11 && $valor != 15) {
+      
+		      $stmt = Conexion::conectar()->prepare("SELECT $parametros FROM $tabla WHERE $item in(:$item)");
 		
-			$stmt -> bindParam(":".$item, $valor, PDO::PARAM_INT);
+			  $stmt -> bindParam(":".$item, $valor, PDO::PARAM_STR);
+		    }else{
+
+		      $stmt = Conexion::conectar()->prepare("SELECT $parametros FROM $tabla WHERE $item in(5,6,7,8,9,11)");
+
+		    }
+			
 
 		}
 
@@ -916,6 +943,41 @@ class ModeloFunciones
 			$stmt = null;
 
 		
+	}
+	static public function mdlDescartarProspecto($tabla, $datos){
+
+			
+	        session_start();
+	        $idAgente = $_SESSION["id"];
+	        $nombreAgente = $_SESSION["nombre"];
+	        $idDescartado = $datos["idDescartado"];
+	        $motivo = $datos["motivoDescartado"];
+	        $nombreDescartado = $datos["nombreDescartado"];
+	        $accion = "".$nombreDescartado." ha sido descartado por ".$nombreAgente."";
+        	$idAccion = 14;
+
+        	$bitacora = Conexion::conectar()->prepare("INSERT INTO `bitacora` (`accion`,`idAgente`,`idProspecto`) values ('".$accion."','".$idAgente."','".$idDescartado."') ");
+
+        	$bitacora -> execute();
+
+        	$seguimiento =  Conexion::conectar()->prepare("INSERT INTO `seguimientos` (`titulo`,`idAgente`,`idProspecto`,`idAccion`) values ('".$accion."','".$idAgente."','".$idDescartado."','".$idAccion."') ");
+        	$seguimiento -> execute();
+
+        	$descartar =  Conexion::conectar()->prepare("INSERT INTO `descartados` (`razonDescartado`,`idProspecto`,`idAgente`) values ('".$motivo."','".$idDescartado."','".$idAgente."') ");
+        	$descartar -> execute();
+
+			$stmt = Conexion::conectar()->prepare("UPDATE $tabla set descartado = 1,estatus = 0 where id = ".$idDescartado." ");
+
+			if ($stmt -> execute()) {
+				return "ok";
+			}else{
+				return "error";
+			}
+
+			$stmt -> close();
+
+			$stmt = null;
+
 	}
 
 

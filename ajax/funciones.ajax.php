@@ -464,6 +464,22 @@ class AjaxFuncionesCrm{
 
 		echo json_encode($respuesta);
 	} 
+	public $idDescartado;
+	public $nombreDescartado;
+	public $motivoDescartado;
+	public function ajaxDescartarProspecto(){
+	
+		$tabla = 'prospectos';
+		$datos = array(
+						'idDescartado' => $this->idDescartado,
+						'nombreDescartado' => $this->nombreDescartado,
+						'motivoDescartado' => $this->motivoDescartado);
+
+		$respuesta = ControladorFunciones::ctrDescartarProspecto($tabla,$datos);
+
+		echo json_encode($respuesta);
+
+	}
 
 }
 /*=============================================
@@ -653,4 +669,12 @@ if (isset($_POST["idProspectoVentaDirecta"])) {
 	$generarVentaDirecta -> folioVentaDirecta = $_POST["folioVentaDirecta"];
 	$generarVentaDirecta -> clienteVentaDirecta = $_POST["clienteVentaDirecta"];
 	$generarVentaDirecta -> ajaxNuevaVentaDirecta();
+}
+if (isset($_POST["idDescartado"])) {
+
+	$descartarProspecto = new AjaxFuncionesCrm();
+	$descartarProspecto -> idDescartado = $_POST["idDescartado"];
+	$descartarProspecto -> nombreDescartado = $_POST["nombreDescartado"];
+	$descartarProspecto -> motivoDescartado = $_POST["motivoDescartado"];
+	$descartarProspecto -> ajaxDescartarProspecto();
 }

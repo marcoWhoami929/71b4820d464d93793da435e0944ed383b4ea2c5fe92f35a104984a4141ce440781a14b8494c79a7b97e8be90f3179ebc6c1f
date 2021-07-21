@@ -35,6 +35,8 @@
                     <thead class="text-center">
                     <tr>
                         <th>Id</th>
+                        <th>Serie</th>
+                        <th>Folio</th>
                         <th>Concepto</th>
                         <th>Cerrada</th>               
                         <th>Estatus</th>

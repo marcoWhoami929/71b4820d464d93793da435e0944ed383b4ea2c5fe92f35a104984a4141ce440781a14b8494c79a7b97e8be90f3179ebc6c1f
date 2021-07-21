@@ -154,6 +154,13 @@ class ControladorFunciones
 		return $respuesta;
 
 	}
+	static public function ctrDescartarProspecto($tabla,$datos){
+
+		$respuesta = ModeloFunciones::mdlDescartarProspecto($tabla,$datos);
+
+		return $respuesta;
+
+	}
 	
 }
 ?>

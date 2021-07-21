@@ -9,7 +9,8 @@ class TablaListaLlamadas{
     $tabla = "prospectos";
     $item = "idAgente";
     $valor = $_SESSION["id"];
-   
+
+  
     $parametros = "id,nombreCompleto,telefono,celular,estatus,idAgente";
 
     $lista = ControladorFunciones::ctrMostrarListaProspectosClientes($tabla, $item, $valor, $parametros);

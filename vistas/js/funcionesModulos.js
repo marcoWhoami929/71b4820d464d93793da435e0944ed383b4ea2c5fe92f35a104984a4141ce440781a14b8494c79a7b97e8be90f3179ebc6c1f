@@ -11,6 +11,68 @@ $(document).ready(function(){
 
 		window.location.href = "tableroAcciones";
 	});
+	$("#tablaProspectos").on("click",".btnDescartarCliente",function(){
+		var id = $(this).attr("id");
+		var nombreDescartado = $(this).attr("nombre");
+		
+
+		localStorage.setItem("idDescartado",id);
+		localStorage.setItem("nombreDescartado",nombreDescartado);
+		
+	});
+	$("#btnDescartarProspecto").on("click",function(){
+
+		var idDescartado = localStorage.getItem("idDescartado");
+		var nombreDescartado = localStorage.getItem("nombreDescartado");
+		var motivoDescartado = $("#motivoDescarte").val();
+
+	    
+    	var datos = new FormData();
+    	datos.append('idDescartado',idDescartado);
+    	datos.append('nombreDescartado',nombreDescartado);
+    	datos.append('motivoDescartado',motivoDescartado);
+   
+    	
+    	
+    	$.ajax({
+            url: "ajax/funciones.ajax.php",
+            method: "POST",
+            data: datos,
+            cache: false,
+            contentType: false,
+            processData: false,
+            dataType: "json",
+            success: function(response) {
+              
+                var respuesta = response;
+	            var responseFinal = respuesta.replace(/['"]+/g, '');
+	            if (responseFinal == "ok") {
+
+	            	swal({
+
+						type: "success",
+						title: "Prospecto descartado exitosamente!",
+						showConfirmButton: true,
+						confirmButtonText: "Cerrar"
+
+					}).then(function(result){
+
+						if(result.value){
+							localStorage.removeItem("idDescartado");
+							localStorage.removeItem("nombreDescartado");
+							window.location = "prospectos";
+
+						}
+
+					});
+
+            	}
+  
+            }
+          });
+          
+
+	});
 	$("#tablaClientes").on("click",".btnViewClient",function(){
 		var id = $(this).attr("id");
 		var nombre = $(this).attr("nombre");
@@ -177,6 +239,29 @@ $(document).ready(function(){
 	});		
 	/**ACTUALIZAR OPORTUNIDAD DE VENTA***/
 	$("#tablaListaOportunidades").on("click",".btnEditarOportunidad",function(){
+
+		var idProspecto = localStorage.getItem("idProspecto");
+		var newIdProspecto = $(this).attr("idProspecto");
+		var newNombreProspecto = $(this).attr("nombreProspecto");
+		if (idProspecto === null) {
+			localStorage.setItem("idProspecto",newIdProspecto);
+			localStorage.setItem("nombreProspecto",newNombreProspecto);
+			if (localStorage.idProspecto === undefined || localStorage.idProspecto === '0') {
+				$("#nombreSearch").val(newNombreProspecto);
+			}else{
+				$('#nombreSearch').val(newNombreProspecto);
+			}
+		}else{
+
+			localStorage.setItem("idProspecto",newIdProspecto);
+			localStorage.setItem("nombreProspecto",newNombreProspecto);
+			if (localStorage.idProspecto === undefined || localStorage.idProspecto === '0') {
+				$("#nombreSearch").val(newNombreProspecto);
+			}else{
+				$('#nombreSearch').val(newNombreProspecto);
+			}
+
+		}
 		
 		var idOportunidad = $(this).attr("idOportunidad");
 		var datos = new FormData();
@@ -281,6 +366,29 @@ $(document).ready(function(){
 	});
 	/**CERRAR VENTA**/
 	$("#tablaListaOportunidades").on("click",".btnCerrarVenta",function(){
+
+		var idProspecto = localStorage.getItem("idProspecto");
+		var newIdProspecto = $(this).attr("idProspecto");
+		var newNombreProspecto = $(this).attr("nombreProspecto");
+		if (idProspecto === null) {
+			localStorage.setItem("idProspecto",newIdProspecto);
+			localStorage.setItem("nombreProspecto",newNombreProspecto);
+			if (localStorage.idProspecto === undefined || localStorage.idProspecto === '0') {
+				$("#nombreSearch").val(newNombreProspecto);
+			}else{
+				$('#nombreSearch').val(newNombreProspecto);
+			}
+		}else{
+
+			localStorage.setItem("idProspecto",newIdProspecto);
+			localStorage.setItem("nombreProspecto",newNombreProspecto);
+			if (localStorage.idProspecto === undefined || localStorage.idProspecto === '0') {
+				$("#nombreSearch").val(newNombreProspecto);
+			}else{
+				$('#nombreSearch').val(newNombreProspecto);
+			}
+
+		}
 		
 		var idOportunidad = $(this).attr("idOportunidad");
 		var nombreProspecto = $(this).attr("nombreProspecto");

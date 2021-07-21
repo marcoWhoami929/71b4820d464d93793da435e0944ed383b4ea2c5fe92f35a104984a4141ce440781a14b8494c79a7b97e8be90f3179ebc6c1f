@@ -54,7 +54,7 @@ class TableData {
 				}
 			}
 			$sWhere = substr_replace( $sWhere, "", -3 );
-			$sWhere .= ') and idAgente = $idAgente';
+			$sWhere .= ') and idAgente in ($idAgente)';
 		}
 		
 		// Individual column filtering
@@ -71,7 +71,7 @@ class TableData {
 		}
 		
 		if($sWhere == ""){
-			$sWhere = "WHERE idAgente = $idAgente";
+			$sWhere = "WHERE idAgente in ($idAgente)";
 		}
 		// SQL queries get data to display
 		$sQuery = "SELECT SQL_CALC_FOUND_ROWS `".str_replace(" , ", " ", implode("`, `", $columns))."` FROM `".$table."` ".$sWhere." ".$sOrder." ".$sLimit;
@@ -110,7 +110,8 @@ class TableData {
 			for ( $i = 0; $i < count($columns); $i++ ) {
 				if ( $columns[$i] === "estatus" ) {
 				
-					$row[] = '<button type="button" id="'.$aRow[ $columns[0] ].'" nombre="'.$aRow[ $columns[1] ].'" class="btn btnModal btn-sm btnViewClient"><i class="glyphicon glyphicon-pencil"></i></button>';
+					$row[] = '<button type="button" id="'.$aRow[ $columns[0] ].'" nombre="'.$aRow[ $columns[1] ].'" class="btn btnModal btn-sm btnViewClient"><i class="glyphicon glyphicon-pencil"></i></button><button id="'.$aRow[ $columns[0] ].'" nombre="'.$aRow[ $columns[1] ].'" class="btn  btn-danger btnDescartarCliente" data-toggle="modal" data-target="#modalDescartarProspecto"><i class="glyphicon glyphicon-trash"></i></button>';
+
 				}
 				else if ( $columns[$i] != ' ' ) {
 				

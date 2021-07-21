@@ -18,7 +18,7 @@ class TablaListaOportunidades{
     for($i = 0; $i < count($lista); $i++){
 
 
-        $acciones = "<div class='btn-group'><button class='btn btn-info btnEditarOportunidad' data-toggle='modal' data-target='#modalActualizarOportunidad' idOportunidad = '".$lista[$i]["idOportunidadVenta"]."'  ><i class='fas fa-edit'></i>Editar</button><button class='btn btn-warning btnCerrarVenta' data-toggle='modal' data-target='#modalCerrarVenta' style='margin-left:20px;' idOportunidad = '".$lista[$i]["idOportunidadVenta"]."' nombreProspecto = '".$lista[$i]["nombreCompleto"]."'><i class='fas fa-money-bill-wave'></i>Cerrar</button></div>";
+        $acciones = "<div class='btn-group'><button class='btn btn-info btnEditarOportunidad' data-toggle='modal' data-target='#modalActualizarOportunidad' idProspecto='".$lista[$i]["idProspecto"]."' idOportunidad = '".$lista[$i]["idOportunidadVenta"]."' nombreProspecto = '".$lista[$i]["nombreCompleto"]."' ><i class='fas fa-edit'></i>Editar</button><button class='btn btn-warning btnCerrarVenta' data-toggle='modal' data-target='#modalCerrarVenta' idProspecto='".$lista[$i]["idProspecto"]."' style='margin-left:20px;' idOportunidad = '".$lista[$i]["idOportunidadVenta"]."' nombreProspecto = '".$lista[$i]["nombreCompleto"]."'><i class='fas fa-money-bill-wave'></i>Cerrar</button></div>";
 
 
         switch ($lista[$i]["idCerteza"]) {

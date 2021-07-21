@@ -80,7 +80,7 @@
                 </div>
                 <div class="col-sm-6 col-md-6 col-lg-6">
                   <span>Cierre Estimado: </span>
-                  <input type="date" class="form-control" id="cierreEstimado" disabled>
+                  <input type="date" class="form-control" id="cierreEstimado">
                 </div>
                 <div class="col-sm-6 col-md-6 col-lg-6">
                   <span>Certeza: </span>

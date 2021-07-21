@@ -6,8 +6,12 @@ $opcion = $_GET["opcion"];
 $idAgente = $_SESSION["id"];
 if ($idAgente != 11 && $idAgente != 15) {
 	$tabla = "";
+	$tabla2 = "";
+	$idAgente = $idAgente;
 }else{
-	$tabla = "admin";
+	$tabla = "Amin";
+	$tabla2 = "admin";
+	$idAgente = "5,6,7,8,9,11";
 }
 switch ($opcion) {
 	case '1':
@@ -22,7 +26,7 @@ switch ($opcion) {
 		$table_data->get('clientesviewrocio','id',array('id', 'nombreCompleto','correo','telefono','celular','taller','domicilio','estatus'),$idAgente);
 		
 	}else{
-		$table_data->get('clientesview'.$tabla,'id',array('id', 'nombreCompleto','correo','telefono','celular','taller','domicilio','estatus'),$idAgente);
+		$table_data->get('clientesview'.$tabla2,'id',array('id', 'nombreCompleto','correo','telefono','celular','taller','domicilio','estatus'),$idAgente);
 
 	}
 	

@@ -9,7 +9,7 @@ class TablaVentas{
     $item = "idOportunidad";
     $valor = $_GET["idProspecto"];
 
-    $parametros = "vt.id,vt.concepto,vt.cerradoDia,vt.montoTotal as montoVenta,vt.estatusPagos,vt.idAgente,op.monto montoOportunidad,(vt.montoTotal / op.monto * 100) as surtimiento";
+    $parametros = "vt.id,vt.serie,vt.folio,vt.concepto,vt.cerradoDia,vt.montoTotal as montoVenta,vt.estatusPagos,vt.idAgente,op.monto montoOportunidad,(vt.montoTotal / op.monto * 100) as surtimiento";
 
     $ventas = ControladorFunciones::ctrMostrarVentas($tabla, $item, $valor, $parametros);
 
@@ -26,6 +26,8 @@ class TablaVentas{
       
       $datosJson   .= '[
               "'.$ventas[$i]["id"].'",
+              "'.$ventas[$i]["serie"].'",
+              "'.$ventas[$i]["folio"].'",
               "<strong>'.preg_replace(['/\s+/','/^\s|\s$/'],[' ',''], $ventas[$i]["concepto"]).'</strong>",
                "'.$ventas[$i]["cerradoDia"].'",
                "'.$ventas[$i]["estatusPagos"].'",
