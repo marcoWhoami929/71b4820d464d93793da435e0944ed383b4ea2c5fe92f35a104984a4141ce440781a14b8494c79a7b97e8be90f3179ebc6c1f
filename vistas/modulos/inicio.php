@@ -39,13 +39,14 @@ PÁGINA DE INICIO
     <!-- row -->
 
     <!-- row -->
+
     <div class="row">
       <div class="col-lg-12">
         
          <?php
-       
+          /*
           include "inicio/grafico-ventas-canales.php";   
-
+          */
         ?>
 
       </div>

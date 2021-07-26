@@ -47,14 +47,14 @@ class TableData {
 		 */
 		$sWhere = "";
 		if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" ) {
-			$sWhere = "WHERE (";
+			$sWhere = "WHERE idAgente in ($idAgente) and (";
 			for ( $i=0 ; $i<count($columns) ; $i++ ) {
 				if ( isset($_GET['bSearchable_'.$i]) && $_GET['bSearchable_'.$i] == "true" ) {
 					$sWhere .= "`".$columns[$i]."` LIKE :search OR ";
 				}
 			}
 			$sWhere = substr_replace( $sWhere, "", -3 );
-			$sWhere .= ') and idAgente in ($idAgente)';
+			$sWhere .= ')';
 		}
 		
 		// Individual column filtering

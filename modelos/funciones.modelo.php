@@ -392,17 +392,27 @@ class ModeloFunciones
 	       	$fechaInicial = date('Y-m-d H:i:s', $fechaInicio);
 	       	$fechaFinal = date('Y-m-d H:i:s', $fechaFin);
 
+	       	if ($idProspecto != 0) {
+	       		
+	       		$nombre = "con ".$datos["nombreProspectoRecordatorio"]."";
+
+	       	}else{
+
+				$nombre = "";
+
+	       	}
+
 	        switch ($datos["evento"]) {
 	        	case 'Cita':
-	        		$accion = "Nueva Cita Agendada con ".$datos["nombreProspectoRecordatorio"]." para el dia ".$datos["fechaRecordatorio"]." a las ".$datos["horaRecordatorio"]."";
+	        		$accion = "Nueva Cita Agendada ".$nombre." para el dia ".$datos["fechaRecordatorio"]." a las ".$datos["horaRecordatorio"]."";
 	        		$idAccion = 2;
 	        		break;
 	        	case 'Visita':
-	        		$accion = "Nueva Visita Agendada con ".$datos["nombreProspectoRecordatorio"]." para el dia ".$datos["fechaRecordatorio"]." a las ".$datos["horaRecordatorio"]."";
+	        		$accion = "Nueva Visita Agendada ".$nombre." para el dia ".$datos["fechaRecordatorio"]." a las ".$datos["horaRecordatorio"]."";
         			$idAccion = 3;
 	        		break;
 	        	case 'Llamada':
-	        		$accion = "Nueva Llamada Agendada con ".$datos["nombreProspectoRecordatorio"]." para el dia ".$datos["fechaRecordatorio"]." a las ".$datos["horaRecordatorio"]."";	
+	        		$accion = "Nueva Llamada Agendada ".$nombre." para el dia ".$datos["fechaRecordatorio"]." a las ".$datos["horaRecordatorio"]."";	
 	        		$idAccion = 1;
 	        		break;
 	        	case 'Recordatorio':
@@ -410,7 +420,7 @@ class ModeloFunciones
         			$idAccion = 4;
 	        		break;
 	        	case 'Demostracion':
-	        		$accion = "Nueva Demostración Agendada con ".$datos["nombreProspectoRecordatorio"]." el dia ".$datos["fechaRecordatorio"]." a las ".$datos["horaRecordatorio"]."";
+	        		$accion = "Nueva Demostración Agendada ".$nombre." para el dia ".$datos["fechaRecordatorio"]." a las ".$datos["horaRecordatorio"]."";
         			$idAccion = 5;
 	        		break;
 	        }
@@ -564,7 +574,7 @@ class ModeloFunciones
 	static public function mdlCargarNuevoProspecto($tabla, $datos){
 		
 
-			if ($datos["tituloProspectoPerfil"] == '1') {
+			if ($datos["tipoClientePerfil"] == '1' || $datos["tipoClientePerfil"] == '4') {
 				$oportunidad = '0';
 				$cliente = '0';
 			}else{
@@ -572,7 +582,7 @@ class ModeloFunciones
 				$cliente = '1';
 			}
 			
-			$stmt = Conexion::conectar()->prepare("INSERT INTO prospectos(nombreCompleto,tituloProspecto,proveedorPinturas,productosFaltantes,mejorar,correo,telefono,celular,taller,sexo,domicilio,origenProspecto,faseProspecto,comentario,idAgente,comentarioReasignacion,latitud,longitud,estatus,reasignado,oportunidad,cliente,descartado,oportunidadesCreadas,habilitado,clasificacion,estadoProspecto) VALUES(:nombrePerfil,:tituloProspectoPerfil,'','','',:correoPerfil,:telefonoPerfil,:celularPerfil,:tallerPerfil,'M',:direccionPerfil,:origenProspectoPerfil,:faseProspectoPerfil,:comentariosPerfil,:idAgentePerfil,'',:latitudPerfil,:longitudPerfil,'1','0','".$oportunidad."','".$cliente."','0','0','1',:clasificacionProspectoPerfil,'Nuevo')");
+			$stmt = Conexion::conectar()->prepare("INSERT INTO prospectos(nombreCompleto,proveedorPinturas,productosFaltantes,mejorar,correo,telefono,celular,taller,sexo,domicilio,comentario,idAgente,comentarioReasignacion,latitud,longitud,estatus,reasignado,oportunidad,cliente,descartado,oportunidadesCreadas,habilitado,clasificacion,estadoProspecto,tipoCliente) VALUES(:nombrePerfil,'','','',:correoPerfil,:telefonoPerfil,:celularPerfil,:tallerPerfil,'M',:direccionPerfil,:comentariosPerfil,:idAgentePerfil,'',:latitudPerfil,:longitudPerfil,'1','0','".$oportunidad."','".$cliente."','0','0','1',:clasificacionProspectoPerfil,'Nuevo',:tipoClientePerfil)");
 
 
 			$stmt -> bindParam(":nombrePerfil", $datos["nombrePerfil"], PDO::PARAM_STR);
@@ -583,9 +593,7 @@ class ModeloFunciones
 			$stmt -> bindParam(":direccionPerfil", $datos["direccionPerfil"], PDO::PARAM_STR);
 			$stmt -> bindParam(":latitudPerfil", $datos["latitudPerfil"], PDO::PARAM_STR);
 			$stmt -> bindParam(":longitudPerfil", $datos["longitudPerfil"], PDO::PARAM_STR);
-			$stmt -> bindParam(":tituloProspectoPerfil", $datos["tituloProspectoPerfil"], PDO::PARAM_STR);
-			$stmt -> bindParam(":faseProspectoPerfil", $datos["faseProspectoPerfil"], PDO::PARAM_STR);
-			$stmt -> bindParam(":origenProspectoPerfil", $datos["origenProspectoPerfil"], PDO::PARAM_STR);
+			$stmt -> bindParam(":tipoClientePerfil", $datos["tipoClientePerfil"], PDO::PARAM_STR);
 			$stmt -> bindParam(":clasificacionProspectoPerfil", $datos["clasificacionProspectoPerfil"], PDO::PARAM_STR);
 			$stmt -> bindParam(":comentariosPerfil", $datos["comentariosPerfil"], PDO::PARAM_STR);
 			$stmt -> bindParam(":idAgentePerfil", $datos["idAgentePerfil"], PDO::PARAM_INT);
@@ -698,10 +706,29 @@ class ModeloFunciones
 	}
 	static public function mdlDetallesEvento($tabla,$item,$valor){
 
-		$stmt = Conexion::conectar()->prepare("SELECT ev.*,pros.nombreCompleto FROM $tabla as ev inner join prospectos as pros ON ev.idProspecto = pros.id WHERE ev.id = :$item");
-		
-		$stmt -> bindParam(":".$item, $valor, PDO::PARAM_INT);
+		$consulta = Conexion::conectar()->prepare("SELECT idProspecto FROM $tabla  WHERE id = $valor");
 
+		$consulta -> execute();
+
+		$result = $consulta -> fetch();
+
+		$idProspecto = $result["idProspecto"];
+
+		if ($idProspecto == 0) {
+
+			$stmt = Conexion::conectar()->prepare("SELECT ev.* FROM $tabla as ev  WHERE ev.id = :$item");
+		
+			
+			
+		}else{
+
+			$stmt = Conexion::conectar()->prepare("SELECT ev.*,pros.nombreCompleto FROM $tabla as ev inner join prospectos as pros ON ev.idProspecto = pros.id WHERE ev.id = :$item");
+		
+			
+
+		}
+
+		$stmt -> bindParam(":".$item, $valor, PDO::PARAM_INT);
 		$stmt -> execute();
 
 		return $stmt -> fetch();
@@ -977,6 +1004,62 @@ class ModeloFunciones
 			$stmt -> close();
 
 			$stmt = null;
+
+	}
+
+	static public function mdlEliminarEvento($tabla, $datos){
+
+	        $idEvento = $datos["idEvento"];
+	        $tituloEvento = $datos["tituloEvento"];
+	        $contactoEvento = $datos["contactoEvento"];
+	        $idContactoEvento = $datos["idContactoEvento"];
+
+	        $idAgente = $datos["idAgente"];
+	        $nombreAgente = $datos["nombreAgente"];
+	        $evento = $datos["evento"];
+	      
+	        switch ($datos["evento"]) {
+	        	case 'Cita':
+	        		$accion = "".$nombreAgente." ha eliminado la Cita ".$tituloEvento." que tenia con ".$contactoEvento."";
+	        		$idAccion = 20;
+	        		break;
+	        	case 'Visita':
+	        		$accion = "".$nombreAgente." ha eliminado la Visita ".$tituloEvento." que tenia con ".$contactoEvento."";
+	        		$idAccion = 20;
+	        		break;
+	        	case 'Llamada':
+	        		$accion = "".$nombreAgente." ha eliminado la Llamada ".$tituloEvento." que tenia con ".$contactoEvento."";
+	        		$idAccion = 20;
+	        		break;
+	        	case 'Recordatorio':
+	        		$accion = "".$nombreAgente." ha eliminado el Recordatorio ".$tituloEvento." que tenia con ".$contactoEvento."";
+	        		$idAccion = 20;
+	        		break;
+	        	case 'Demostracion':
+	        		$accion = "".$nombreAgente." ha eliminado la Demostracion ".$tituloEvento." que tenia con ".$contactoEvento."";
+	        		$idAccion = 20;
+	        		break;
+	        }
+	        
+        	$bitacora = Conexion::conectar()->prepare("INSERT INTO `bitacora` (`accion`,`idAgente`,`idProspecto`) values ('".$accion."','".$idAgente."','".$idContactoEvento."') ");
+
+        	$bitacora -> execute();
+
+        	$seguimiento =  Conexion::conectar()->prepare("INSERT INTO `seguimientos` (`titulo`,`idAgente`,`idProspecto`,`idAccion`) values ('".$accion."','".$idAgente."','".$idContactoEvento."','".$idAccion."') ");
+        	$seguimiento -> execute();
+      	
+        	$stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE id = '".$idEvento."'");
+
+			if ($stmt -> execute()) {
+				return "ok";
+			}else{
+				return "error";
+			}
+
+			$stmt -> close();
+
+			$stmt = null;
+			
 
 	}
 

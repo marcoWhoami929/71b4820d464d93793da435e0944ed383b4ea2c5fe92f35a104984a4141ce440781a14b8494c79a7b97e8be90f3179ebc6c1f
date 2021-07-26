@@ -161,6 +161,13 @@ class ControladorFunciones
 		return $respuesta;
 
 	}
+	static public function ctrEliminarEvento($tabla,$datos){
+
+		$respuesta = ModeloFunciones::mdlEliminarEvento($tabla,$datos);
+
+		return $respuesta;
+
+	}
 	
 }
 ?>

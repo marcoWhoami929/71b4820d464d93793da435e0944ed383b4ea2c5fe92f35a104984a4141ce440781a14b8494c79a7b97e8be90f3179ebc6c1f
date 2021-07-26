@@ -239,6 +239,8 @@ $recordatorios = $req->fetchAll();
 
               <button type="button" class="btn btnModal" data-dismiss="modal" id="btnModalEventoEdit">Cerrar</button>
               <button type="submit" class="btn btnModal" id="btnEditarEvento">Actualizar</button>
+
+              <button type="submit" class="btn btn-danger" id="btnEliminarEvento">Eliminar</button>
             </div>
 
           </div>
@@ -343,9 +345,11 @@ $recordatorios = $req->fetchAll();
             eventRender: function(event, element) {
               element.bind('dblclick', function() {
                 $('#ModalEdit #idEventoRecordatorio').val(event.id);
+
                  var datos = new FormData();
                  datos.append('eventId',event.id);
                  datos.append('eventoElegido',event.evento);
+                 
                  $.ajax({
                   url: "ajax/funciones.ajax.php",
                   method: "POST",
@@ -500,7 +504,7 @@ $recordatorios = $req->fetchAll();
 
           var idProspecto = localStorage.idProspecto;
           if (idProspecto === undefined) {
-            alert("Para poder guardar un evento debe elegir un prospecto");
+           
           }else{
             var datos = new FormData();
             datos.append("identificador", ""+localStorage.idProspecto+"");
@@ -545,7 +549,7 @@ $recordatorios = $req->fetchAll();
            initMap : function(lati,long) {
 
            // Creamos un objeto mapa y especificamos el elemento DOM donde se va a mostrar.
-
+           geocoder = new google.maps.Geocoder();
            mapa.map = new google.maps.Map(document.getElementById('mapa'), {
              center: {lat: lati, lng: long},
              scrollwheel: true,
@@ -563,11 +567,15 @@ $recordatorios = $req->fetchAll();
            });
 
            google.maps.event.addListener(mapa.marker, 'dragend', function (evt) {
-                $("#latRecordatorio").html(evt.latLng.lat().toFixed(6));
-                $("#longRecordatorio").html(evt.latLng.lng().toFixed(6));
+                var coordenadas = evt.latLng.lat().toFixed(6)+","+evt.latLng.lng().toFixed(6);
+    
+                $("#coordenadasPerfilCrear").val(coordenadas);
+
+                $("#latRecordatorio").val(evt.latLng.lat().toFixed(6));
+                $("#longRecordatorio").val(evt.latLng.lng().toFixed(6));
                 localStorage.setItem("latitud", evt.latLng.lat().toFixed(6));
                 localStorage.setItem("longitud",evt.latLng.lng().toFixed(6));
-
+                 codeLatLng(evt.latLng.lat().toFixed(6),evt.latLng.lng().toFixed(6));
                 //decodingDirecion(localStorage.latitud*1,localStorage.longitud*1);
                 mapa.map.panTo(evt.latLng);
                 
@@ -581,31 +589,27 @@ $recordatorios = $req->fetchAll();
           }
 
           mapa.initMap(localStorage.latitud*1,localStorage.longitud*1);
-          function decodingDirecion(lat,lng){
-             var Http = new XMLHttpRequest();
-              var latitud = lat;
-              var logitud = lng;
-              var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latitud + ',' + logitud
-                  + '&key=AIzaSyA7Ow27ztKwFY0_CyX5FXXfK6PV87gJsPQ';
-              Http.open('POST', url);
-              Http.send();
-              Http.onreadystatechange = (e) => {
-                  var json = JSON.parse(Http.responseText)
-                  console.log(json["results"]);
-                  //console.log(results.address_components[0]["long_name"]);
-                  /*
-                  for (var i = 0; i < place.address_components.length; i++) {
-                  var addressType = place.address_components[i].types[0];
-                  if (componentForm[addressType]) {
-                    var val = place.address_components[i][componentForm[addressType]];
-                    document.getElementById(addressType).value = val;
-                    localStorage.setItem(addressType,val);
-                  }
-                   */
-                  
-              }
-           
+          history.forward();
+
+       function codeLatLng(latitud,longitud) {
+
+        var lat = latitud;
+        var lng = longitud;
+        var latlng = new google.maps.LatLng(lat, lng);
+        geocoder.geocode({'latLng': latlng}, function(results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            if (results[0]) {
+
+              $('#direccionPerfil').val(results[0].formatted_address);
+
+            } else {
+              alert('No results found');
+            }
+          } else {
+            alert('Geocoder failed due to: ' + status);
           }
+        });
+      }
   })
 </script>
 <style type="text/css" media="screen">

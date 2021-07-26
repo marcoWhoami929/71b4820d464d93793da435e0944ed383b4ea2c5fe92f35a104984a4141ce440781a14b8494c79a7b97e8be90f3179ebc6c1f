@@ -276,9 +276,7 @@ class AjaxFuncionesCrm{
 	public $direccionPerfilCrear;
 	public $latitudPerfilCrear;
 	public $longitudPerfilCrear;
-	public $tituloProspectoPerfilCrear;
-	public $faseProspectoPerfilCrear;
-	public $origenProspectoPerfilCrear;
+	public $tipoClientePerfilCrear;
 	public $clasificacionProspectoPerfilCrear;
 	public $comentariosPerfilCrear;
 
@@ -297,9 +295,7 @@ class AjaxFuncionesCrm{
 					   'direccionPerfil' => $this->direccionPerfilCrear,
 					   'latitudPerfil' => $this->latitudPerfilCrear,
 					   'longitudPerfil' => $this->longitudPerfilCrear,
-					   'tituloProspectoPerfil' => $this->tituloProspectoPerfilCrear,
-					   'faseProspectoPerfil' => $this->faseProspectoPerfilCrear,
-					   'origenProspectoPerfil' => $this->origenProspectoPerfilCrear,
+					   'tipoClientePerfil' => $this->tipoClientePerfilCrear,
 					   'clasificacionProspectoPerfil' => $this->clasificacionProspectoPerfilCrear,
 					   'comentariosPerfil' => $this->comentariosPerfilCrear,
 					  	'idAgentePerfil' => $idAgente);
@@ -480,6 +476,50 @@ class AjaxFuncionesCrm{
 		echo json_encode($respuesta);
 
 	}
+	public $idEventoDelete;
+	public $eventoDelete;
+	public $tituloEventoDelete;
+	public $prospectoEventoDelete;
+	public $idProspectoEventoDelete;
+
+	public function ajaxEliminarEvento(){
+
+		session_start();
+		$idAgente = $_SESSION["id"];
+		$agente = $_SESSION["nombre"];
+		switch ($this->eventoDelete) {
+			case 'Cita':
+				$tabla = "citas";
+				break;
+			case 'Visita':
+				$tabla = "visitas";
+				break;
+			case 'Llamada':
+				$tabla = "llamada";
+				break;
+			case 'Recordatorio':
+				$tabla = "recordatorios";
+				break;
+			case 'Demostracion':
+				$tabla = "demostraciones";
+				break;
+			
+		}
+		$datos = array(
+					    'idEvento' => $this->idEventoDelete,
+					    'tituloEvento' => $this->tituloEventoDelete,
+						'contactoEvento' => $this->prospectoEventoDelete,
+						'idContactoEvento'  => $this->idProspectoEventoDelete,
+						'idAgente' => $idAgente,
+						'nombreAgente' => $agente,
+						'evento' => $this->eventoDelete);
+
+		$respuesta = ControladorFunciones::ctrEliminarEvento($tabla,$datos);
+
+		echo  json_encode($respuesta);
+
+
+	}
 
 }
 /*=============================================
@@ -608,9 +648,7 @@ if (isset($_POST["nombrePerfilCrear"])) {
 	$insertar -> direccionPerfilCrear = $_POST["direccionPerfilCrear"];
 	$insertar -> latitudPerfilCrear = $_POST["latitudPerfilCrear"];
 	$insertar -> longitudPerfilCrear = $_POST["longitudPerfilCrear"];
-	$insertar -> tituloProspectoPerfilCrear = $_POST["tituloProspectoPerfilCrear"];
-	$insertar -> faseProspectoPerfilCrear = $_POST["faseProspectoPerfilCrear"];
-	$insertar -> origenProspectoPerfilCrear = $_POST["origenProspectoPerfilCrear"];
+	$insertar -> tipoClientePerfilCrear = $_POST["tipoClientePerfilCrear"];
 	$insertar -> clasificacionProspectoPerfilCrear = $_POST["clasificacionProspectoPerfilCrear"];
 	$insertar -> comentariosPerfilCrear = $_POST["comentariosPerfilCrear"];
 	$insertar -> ajaxCargarNuevoProspecto();
@@ -677,4 +715,15 @@ if (isset($_POST["idDescartado"])) {
 	$descartarProspecto -> nombreDescartado = $_POST["nombreDescartado"];
 	$descartarProspecto -> motivoDescartado = $_POST["motivoDescartado"];
 	$descartarProspecto -> ajaxDescartarProspecto();
+}
+if(isset($_POST["idEventoDelete"])){
+	
+	$eliminarEvento = new AjaxFuncionesCrm();
+	$eliminarEvento -> idEventoDelete = $_POST["idEventoDelete"];
+	$eliminarEvento -> eventoDelete = $_POST["eventoDelete"];
+	$eliminarEvento -> tituloEventoDelete = $_POST["tituloEventoDelete"];
+	$eliminarEvento -> prospectoEventoDelete = $_POST["prospectoEventoDelete"];
+	$eliminarEvento -> idProspectoEventoDelete = $_POST["idProspectoEventoDelete"];
+	$eliminarEvento -> ajaxEliminarEvento();
+
 }
